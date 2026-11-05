@@ -21,3 +21,6 @@ export const forgetPreview = (id: string) => previews.delete(id);
 export const clearPreviews = () => previews.clear();
 
 export const askToApply = (p: Preview) => `Preview ${p.id}: ${p.text}\nNothing has been changed yet. To apply exactly this, say yes and I will apply preview ${p.id}.`;
+
+export const PREVIEW_LIFETIME_MS = 60 * 60 * 1000;
+export const isExpired = (p: Preview, now = Date.now()) => now - p.createdAt > PREVIEW_LIFETIME_MS;
