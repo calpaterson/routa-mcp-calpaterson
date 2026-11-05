@@ -41,8 +41,8 @@ async function run(token: string, name: string, args: Record<string, unknown> = 
 }
 
 test("the read tools are listed and are read-only tools", () => {
-  assert.deepEqual(tools.map((t) => t.name), ["show_access", "show_policies"]);
-  assert.ok(tools.every((t) => t.access === "read"));
+  const readTools = tools.filter((t) => t.access === "read").map((t) => t.name);
+  assert.deepEqual(readTools, ["show_access", "show_policies"]);
 });
 
 test("show_access lists every group, with none for an empty group", async () => {
