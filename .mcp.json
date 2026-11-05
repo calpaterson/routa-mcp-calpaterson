@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "routa-identity": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["mcp/src/main.ts"],
+      "env": {
+        "MCP_TOKEN": "${ROUTA_TOKEN}"
+      }
+    }
+  }
+}
