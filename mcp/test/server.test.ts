@@ -138,7 +138,7 @@ test("over stdio: initialize and tools/list, one JSON message per line; no MCP_T
   child.kill();
   const lines = out.split("\n").filter(Boolean).map((l) => JSON.parse(l));
   assert.deepEqual(lines.map((l) => l.id), [1, 2]);
-  assert.deepEqual(lines[1].result.tools, []);
+  assert.deepEqual(lines[1].result.tools.map((t: any) => t.name), ["show_access", "show_policies"]);
 
   const env = { ...process.env };
   delete env.MCP_TOKEN;
