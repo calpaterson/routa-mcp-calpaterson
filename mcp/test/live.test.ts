@@ -76,7 +76,7 @@ test("an admin token: read, preview, apply, check the platform, and undo by aski
     const init = await s.request("initialize", { protocolVersion: "2025-06-18" });
     assert.equal(init.serverInfo.name, "routa-settings");
     const names = (await s.request("tools/list")).tools.map((t: any) => t.name);
-    assert.deepEqual(names, ["show_access", "show_policies", "preview_access_change", "preview_policy_change", "apply_change"]);
+    assert.deepEqual(names, ["show_access", "show_policies", "preview_access_change", "preview_policy_change", "apply_change", "show_baseline_differences"]);
 
     assert.equal(await appsOf("ext-contractors").then((a) => a.includes("finance")), true);
     const seen = await s.tool("show_access", { group: "ext-contractors" });
@@ -160,4 +160,20 @@ test("an invalid token is refused on every tool, and the platform really would l
     body: JSON.stringify({ changes: [{ type: "policy", id: "password-min-length", value: await policy("password-min-length") }] }),
   });
   assert.equal(res.status, 200);
+});
+
+test("a read-only token lists the 9 differences from the baseline in plain words, and changes nothing", async () => {
+  const s = startServer(readToken!);
+  try {
+    const before = await platformSettings();
+    const r = await s.tool("show_baseline_differences");
+    assert.equal(r.isError, false);
+    assert.match(r.text, /^9 settings differ from the security baseline:/);
+    assert.match(r.text, /- ext-contractors can reach crm, but the baseline says it must not\./);
+    assert.match(r.text, /- Guest access is open, but the baseline says invite-only\./);
+    assert.match(r.text, /- Session length in hours is 24, but the baseline says 8\./);
+    assert.equal(await platformSettings(), before);
+  } finally {
+    s.stop();
+  }
 });
