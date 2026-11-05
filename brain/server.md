@@ -5,6 +5,7 @@ Start: `MCP_TOKEN=<token> [ROUTA_URL=http://localhost:4010] node mcp/src/main.ts
 Tools (one file each in `mcp/src/tools/`):
 - `show_access` (read): all groups, one group, or who reaches an application.
 - `show_policies` (read): all policies or those matching a word.
+- `show_baseline_differences` (read): lists every setting that differs from `client/security-baseline.json`, one plain sentence each (group reaches an app it must not / misses one it should; policy is X but the baseline says Y; group or policy missing on either side), or says everything matches. Only GETs, so it works with a read-only token. Comparison is in `mcp/src/baseline.ts`. Against the seed it should list the 9 differences in [baseline.md](baseline.md) (live test written 2026-11-05, not yet run: no tokens were in the shell).
 - `preview_access_change` / `preview_policy_change` (admin): validate, then store a preview in memory and answer in plain words with its id. Changes nothing. A request that changes nothing gets no id.
 - `apply_change` (admin): takes only a preview id. Refuses an unknown, used or old (over 1 hour) id, or a setting that changed since the preview. Sends one PATCH holding exactly the previewed change, then forgets the preview.
 
