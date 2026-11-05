@@ -13,3 +13,5 @@ Token check: `callTool` in `mcp/src/server.ts` calls `whoami` before every tool 
 Known limits: previews live in memory, so a restart forgets them. Application ids are carried in `mcp/src/apps.ts` (the API doesn't list them); update it if the platform gains one. Policy values are checked for type, positive numbers and non-empty text only; the platform accepts any string for `guest-access`.
 
 Tests: `node --test "mcp/test/*.test.ts"`. `live.test.ts` starts its own platform copy on a free port with a temporary data directory and needs `ROUTA_TOKEN` and `ROUTA_READONLY_TOKEN` in the environment.
+
+Worktrees: `.claude/hooks/worktree-create.ts` (the WorktreeCreate hook, copied from `toolbox/hooks/`) creates the worktree, then runs `scripts/setup-worktree.ts` in it. That script removes the worktree's `test-environment/.data` and collect log (so it starts from the seed), picks a free port (keeping the last one while it is still free) and writes `PORT` and `ROUTA_URL` to `.env.worktree` (gitignored). Not yet run (written 2026-11-05, unchecked).
