@@ -1,0 +1,6 @@
+collect.log
+test-environment/.data/
+.env*
+node_modules/
+scratch/
+.claude/settings.local.json
